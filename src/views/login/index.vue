@@ -5,22 +5,21 @@
         <h3 class="title">用户登录</h3>
       </div>
       <el-form-item prop="username">
-        <el-icon :size="20" class="svg-container">
-          <Edit />
-        </el-icon>
+        <!-- <el-icon :size="20" class="svg-container">
+          <el-icon><View /></el-icon>
+        </el-icon> -->
+        <svg-icon icon="user" class="svg-container"></svg-icon>
         <el-input v-model="ruleForm.username" />
       </el-form-item>
       <el-form-item prop="password">
-        <el-icon :size="20" class="svg-container">
-          <Edit />
-        </el-icon>
-        <el-input v-model="ruleForm.password" />
+        <svg-icon icon="password" class="svg-container"></svg-icon>
+        <!-- <l-icon :size="20" class="svg-container">
+          <el-icon><Edit /></el-icon>
+        </l-icon>e -->
+        <el-input type="password" v-model="ruleForm.password" />
       </el-form-item>
       <el-form-item>
-        <el-button
-          type="primary"
-          class="login-button"
-          @click="loginHandler(formRef)"
+        <el-button type="primary" class="login-button" @click="loginHandler"
           >登录</el-button
         >
       </el-form-item>
@@ -30,7 +29,9 @@
 
 <script lang="ts">
 import { defineComponent, reactive, ref, toRefs, watch } from 'vue'
-import { Edit } from '@element-plus/icons-vue'
+// import { View } from '@element-plus/icons-vue'
+import { login } from '@/api/login.js'
+import SvgIcon from '@/components/SvgIcon/index.vue'
 
 export default defineComponent({
   name: 'LoginView',
@@ -84,11 +85,12 @@ export default defineComponent({
     //   }
     // )
 
-    const loginHandler = async (formEl: any) => {
-      if (!formEl) return
-      await formEl.validate((valid: any, fields: any) => {
+    const loginHandler = () => {
+      if (!formRef.value) return
+      ;(formRef.value! as any).validate(async (valid: any, fields: any) => {
         if (valid) {
-          console.log('aaa')
+          const result = await login(ruleForm)
+          console.log(result)
         } else {
           console.log('error')
         }
@@ -103,7 +105,8 @@ export default defineComponent({
     }
   },
   components: {
-    Edit
+    // View,
+    SvgIcon
   }
 })
 </script>
